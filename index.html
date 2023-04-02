@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ngemsed😓☝️</title>
+	<style>
+		h1 {
+  text-shadow: 2px 2px 4px #000000;
+}
+		body {
+  background: linear-gradient(to bottom right, #D4F1F4, #FFE5D9, #F3E5AB);
+}
+	.center {
+  text-align: center;
+}
+img {
+  margin: 0 auto;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: 520px;
+  height: 330px;
+}
+		#audio-player {
+    margin: 20px;
+    width: 500px;
+		  	}
+  #lyrics {
+  display: none;
+  margin-top: 20px;
+  font-size: 28px;
+  line-height: 1.5;
+  text-align: center;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+    @font-face {
+      font-family: "Ampersand";
+      src: url("font/ampersand.ttf");
+    }
+    h1 {
+      font-family: "Ampersand", sans-serif
+    }
+    #lyrics {
+      font-family: "Ampersand", sans-serif
+    }
+    h1 {
+      font-size: 36px;
+      text-align: center;
+      color: #333;
+      margin: 20px 0;
+    }
+audio {
+  width: 100%;
+  margin: 20px 0;
+}
+
+audio::-webkit-media-controls-panel {
+  background-color: hitam;
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button {
+  height: 50px;
+  width: 50px;
+  background-size: 30px 30px;
+  background-position: center;
+}
+
+audio::-webkit-media-controls-timeline {
+  height: 5px;
+}
+
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display {
+  font-size: 16px;
+  font-weight: bold;
+}
+	</style>
+</head>
+<body>
+ <h1>Say You Won't Let Go</h1>
+ <img src="fekk smell.jpg" alt="description of the image">
+  <audio id="my-audio" controls>
+    <source src="James Arthur.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+	</audio>
+	<div id="lyrics"></div>
+	<script>
+		const audio = document.getElementById("my-audio");
+		const lyricsDiv = document.getElementById("lyrics");
+		const lyrics = [
+			{ time: 11, text: "I met you in the dark" },
+			{ time: 13, text: "you lit me up" },
+			{ time: 16, text: "you made me feel as though" },
+			{ time: 18, text: "I was enough" },
+			{ time: 21, text: "we danced the night away" },
+			{ time: 23, text: "we drank too much" },
+			{ time: 26, text: "I held your hair back when"},
+			{ time: 28, text: "you were throwing up"},
+			{ time: 31, text: "then you smiled over your shoulder"},
+			{ time: 33, text: "for a minute, I was stone cold sober"},
+			{ time: 36, text: "I pulled you closer to my chest"},
+			{ time: 41, text: "and you asked me to stay over"},
+			{ time: 44, text: "I said, I already told ya"},
+			{ time: 46, text: "I think that you should get some rest"},
+			{ time: 51, text: "I knew I loved you then"},
+			{ time: 53, text: "but you'd never know"},
+			{ time: 56, text: "cause I played it cool"},
+			{ time: 58, text: "when I was scared of letting go"},
+			{ time: 61, text: "I knew I needed you"},
+			{ time: 64, text: "but I never showed"},
+			{ time: 66, text: "but I wanna stay with you"},
+			{ time: 68, text: "until we're grey and old"},
+			{ time: 71, text: "just say you won't let go"},
+			{ time: 76, text: "just say you won't let go"},
+			{ time: 81, text: "I'll wake you up with some"},
+			{ time: 84, text: "breakfast in bed"},
+			{ time: 86, text: "I'll bring you coffe with"},
+			{ time: 89, text: "a kiss on your head"},
+			{ time: 91, text: "and I'll take the kids to school"},
+			{ time: 94, text: "wave them goodbye"},
+			{ time: 96, text: "and I'll thank my lucky stars"},
+			{ time: 99, text: "for that night"},
+			{ time: 102, text: "when you looked over your shoulder"},
+			{ time: 104, text: "for a minute, I forget that I'm older"},
+			{ time: 107, text: "I wanna dance with you right now, whoa"},
+			{ time: 111, text: "and you look as beautiful as ever"},
+			{ time: 114, text: "and I swear that every day you'll get better"},
+			{ time: 117, text: "you make me feel this way somehow"},
+			{ time: 122, text: "Im so in love with you"},
+			{ time: 124, text: "and I hope you know"},
+			{ time: 127, text: "Daleng your love is more"},
+			{ time: 129, text: "than worth is weight in gold"},
+			{ time: 132, text: "we've come so far my dear"},
+			{ time: 134, text: "look we've grown"},
+			{ time: 137, text: "and i wanna stay with you"},
+			{ time: 139, text: "until we're grey and old"},
+			{ time: 141, text: "just say you won't let go"},
+			{ time: 146, text: "just say you won't let go"},
+			{ time: 152, text: "I wanna live with you"},
+			{ time: 155, text: "even when we're gosts"},
+			{ time: 157, text: "cause you were always there for me"},
+			{ time: 159, text: "when I neede you most"},
+			{ time: 162, text: "I'm gonna love you till"},
+			{ time: 165, text: "my lungs give out"},
+			{ time: 167, text: "I promise till death we part"},
+			{ time: 170, text: "like in our vows"},
+			{ time: 172, text: "so I wrote this song for you"},
+			{ time: 175, text: "now everybody knows"},
+			{ time: 177, text: "that it's just you and me"},
+			{ time: 180, text: "till we're grey and old"},
+			{ time: 182, text: "just say you won't let go"},
+			{ time: 187, text: "just say you won't let go"},
+			{ time: 192, text: "just say you won't let go"},
+			{ time: 196, text: "oh,just say you won't let go"},
+		];
+		
+		audio.addEventListener("timeupdate", () => {
+			const currentTime = Math.floor(audio.currentTime);
+			const currentLyric = lyrics.find(lyric => lyric.time === currentTime);
+			if (currentLyric) {
+				lyricsDiv.innerHTML = currentLyric.text;
+				lyricsDiv.style.display = "block";
+			}
+		});
+	</script>
+</body>
+</html>
