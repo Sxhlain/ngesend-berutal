@@ -2,169 +2,402 @@
 <html>
 <head>
 	<title>ngemsed😓☝️</title>
-	<style>
-		h1 {
-  text-shadow: 2px 2px 4px #000000;
-}
-		body {
-  background: linear-gradient(to bottom right, #D4F1F4, #FFE5D9, #F3E5AB);
-}
-	.center {
-  text-align: center;
-}
-img {
-  margin: 0 auto;
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: 520px;
-  height: 330px;
-}
-		#audio-player {
-    margin: 20px;
-    width: 500px;
-		  	}
-  #lyrics {
-  display: none;
-  margin-top: 20px;
-  font-size: 28px;
-  line-height: 1.5;
-  text-align: center;
-  background-color: #f5f5f5;
-  padding: 10px;
-  border-radius: 15px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-}
-    @font-face {
-      font-family: "Ampersand";
-      src: url("font/ampersand.ttf");
+		<style>
+    :root {
+      --bg-1: #0f0c29;
+      --bg-2: #302b63;
+      --bg-3: #24243e;
+      --brand: #8A2BE2;
+      --brand-2: #00E5FF;
+      --text: #EAEAF6;
+      --muted: #B8B8D1;
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.18);
+      --glow: 0 10px 30px rgba(138, 43, 226, 0.45), 0 6px 18px rgba(0, 229, 255, 0.25);
     }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: linear-gradient(-45deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      background-size: 400% 400%;
+      animation: bgMove 24s ease infinite;
+      display: grid;
+      place-items: center;
+      padding: 32px 18px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     h1 {
-      font-family: "Ampersand", sans-serif
-    }
-    #lyrics {
-      font-family: "Ampersand", sans-serif
-    }
-    h1 {
-      font-size: 36px;
+      margin: 0 0 22px;
+      font-weight: 800;
+      font-size: clamp(28px, 3.2vw, 40px);
+      letter-spacing: 0.5px;
       text-align: center;
-      color: #333;
-      margin: 20px 0;
+      background: linear-gradient(90deg, #fff, var(--brand-2), var(--brand));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 24px rgba(255,255,255,0.15);
     }
-audio {
-  width: 100%;
-  margin: 20px 0;
-}
 
-audio::-webkit-media-controls-panel {
-  background-color: hitam;
-}
+    .app-card {
+      width: min(1100px, 95vw);
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: clamp(14px, 2.5vw, 24px);
+      box-shadow: var(--glow);
+      backdrop-filter: blur(14px) saturate(120%);
+    }
 
-audio::-webkit-media-controls-play-button,
-audio::-webkit-media-controls-pause-button {
-  height: 50px;
-  width: 50px;
-  background-size: 30px 30px;
-  background-position: center;
-}
+    .player-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
 
-audio::-webkit-media-controls-timeline {
-  height: 5px;
-}
+    @media (min-width: 860px) {
+      .player-grid { grid-template-columns: 0.9fr 1.1fr; gap: 26px; }
+    }
 
-audio::-webkit-media-controls-current-time-display,
-audio::-webkit-media-controls-time-remaining-display {
-  font-size: 16px;
-  font-weight: bold;
-}
-	</style>
+    .art-wrap {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      transform: translateZ(0);
+      isolation: isolate;
+    }
+
+    .art-wrap img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(.2,.8,.2,1), filter 0.8s;
+      filter: saturate(105%) contrast(102%);
+    }
+
+    .art-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(1200px 220px at 10% -10%, rgba(138,43,226,0.35), transparent 60%),
+                  radial-gradient(900px 200px at 110% 110%, rgba(0,229,255,0.25), transparent 60%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .art-wrap.playing img { transform: scale(1.04); }
+
+    audio { width: 100%; margin-top: 14px; }
+
+    /* Lyrics */
+    .lyrics-box {
+      position: relative;
+      height: clamp(320px, 50vh, 520px);
+      padding: 8px 6px;
+      border-radius: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: inset 0 -10px 30px rgba(0,0,0,0.18);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 8%, black 92%, transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, black 8%, black 92%, transparent 100%);
+    }
+
+    .lyrics-list {
+      list-style: none;
+      margin: 0;
+      padding: 16px 12px 24px;
+      height: 100%;
+      overflow: auto;
+      scroll-behavior: smooth;
+      text-align: center;
+    }
+
+    .lyric-line {
+      padding: 12px 16px;
+      margin: 8px 8px;
+      border-radius: 12px;
+      color: var(--muted);
+      opacity: 0.55;
+      letter-spacing: 0.2px;
+      transform: translateZ(0);
+      transition: opacity .35s ease, color .35s ease, transform .35s ease, background .6s ease;
+      cursor: pointer;
+      user-select: none;
+      font-size: clamp(16px, 2.2vw, 22px);
+      line-height: 1.5;
+    }
+
+    .lyric-line:hover { opacity: 0.8; }
+
+    .lyric-line.active {
+      color: #fff;
+      opacity: 1;
+      transform: scale(1.035);
+      text-shadow: 0 2px 18px rgba(255,255,255,0.12), 0 6px 26px rgba(138,43,226,0.35);
+      border: 1px solid rgba(255,255,255,0.14);
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(120% 220% at 50% 50%, rgba(255,255,255,0.10), rgba(255,255,255,0) 60%);
+    }
+
+    .lyric-line.active .karaoke-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand) 0%, var(--brand-2) 100%);
+      mix-blend-mode: screen;
+      opacity: 0.65;
+      pointer-events: none;
+      transition: width 0.35s linear;
+    }
+
+    .lyric-line span.text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .lyrics-list .lyric-line:nth-child(1n+1) { filter: blur(0px); }
+    .lyrics-list .lyric-line:not(.active) {
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .lyrics-list .lyric-line.active + .lyric-line { opacity: 0.9; }
+    .lyrics-list .lyric-line.active + .lyric-line + .lyric-line { opacity: 0.75; }
+    .lyrics-list .lyric-line.active ~ .lyric-line { opacity: 0.6; }
+
+    @keyframes shimmer {
+      0% { background-position: -120% 0; }
+      100% { background-position: 120% 0; }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(138,43,226,0); }
+      50% { box-shadow: 0 0 28px rgba(138,43,226,0.35); }
+    }
+		</style>
 </head>
 <body>
- <h1>Say You Won't Let Go</h1>
- <img src="fekk smell.jpg" alt="description of the image">
-  <audio id="my-audio" controls>
-    <source src="James Arthur.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-	</audio>
-	<div id="lyrics"></div>
-	<script>
-		const audio = document.getElementById("my-audio");
-		const lyricsDiv = document.getElementById("lyrics");
-		const lyrics = [
-			{ time: 11, text: "I met you in the dark" },
-			{ time: 13, text: "you lit me up" },
-			{ time: 16, text: "you made me feel as though" },
-			{ time: 18, text: "I was enough" },
-			{ time: 21, text: "we danced the night away" },
-			{ time: 23, text: "we drank too much" },
-			{ time: 26, text: "I held your hair back when"},
-			{ time: 28, text: "you were throwing up"},
-			{ time: 31, text: "then you smiled over your shoulder"},
-			{ time: 33, text: "for a minute, I was stone cold sober"},
-			{ time: 36, text: "I pulled you closer to my chest"},
-			{ time: 41, text: "and you asked me to stay over"},
-			{ time: 44, text: "I said, I already told ya"},
-			{ time: 46, text: "I think that you should get some rest"},
-			{ time: 51, text: "I knew I loved you then"},
-			{ time: 53, text: "but you'd never know"},
-			{ time: 56, text: "cause I played it cool"},
-			{ time: 58, text: "when I was scared of letting go"},
-			{ time: 61, text: "I knew I needed you"},
-			{ time: 64, text: "but I never showed"},
-			{ time: 66, text: "but I wanna stay with you"},
-			{ time: 68, text: "until we're grey and old"},
-			{ time: 71, text: "just say you won't let go"},
-			{ time: 76, text: "just say you won't let go"},
-			{ time: 81, text: "I'll wake you up with some"},
-			{ time: 84, text: "breakfast in bed"},
-			{ time: 86, text: "I'll bring you coffe with"},
-			{ time: 89, text: "a kiss on your head"},
-			{ time: 91, text: "and I'll take the kids to school"},
-			{ time: 94, text: "wave them goodbye"},
-			{ time: 96, text: "and I'll thank my lucky stars"},
-			{ time: 99, text: "for that night"},
-			{ time: 102, text: "when you looked over your shoulder"},
-			{ time: 104, text: "for a minute, I forget that I'm older"},
-			{ time: 107, text: "I wanna dance with you right now, whoa"},
-			{ time: 111, text: "and you look as beautiful as ever"},
-			{ time: 114, text: "and I swear that every day you'll get better"},
-			{ time: 117, text: "you make me feel this way somehow"},
-			{ time: 122, text: "Im so in love with you"},
-			{ time: 124, text: "and I hope you know"},
-			{ time: 127, text: "Daleng your love is more"},
-			{ time: 129, text: "than worth is weight in gold"},
-			{ time: 132, text: "we've come so far my dear"},
-			{ time: 134, text: "look we've grown"},
-			{ time: 137, text: "and i wanna stay with you"},
-			{ time: 139, text: "until we're grey and old"},
-			{ time: 141, text: "just say you won't let go"},
-			{ time: 146, text: "just say you won't let go"},
-			{ time: 152, text: "I wanna live with you"},
-			{ time: 155, text: "even when we're gosts"},
-			{ time: 157, text: "cause you were always there for me"},
-			{ time: 159, text: "when I neede you most"},
-			{ time: 162, text: "I'm gonna love you till"},
-			{ time: 165, text: "my lungs give out"},
-			{ time: 167, text: "I promise till death we part"},
-			{ time: 170, text: "like in our vows"},
-			{ time: 172, text: "so I wrote this song for you"},
-			{ time: 175, text: "now everybody knows"},
-			{ time: 177, text: "that it's just you and me"},
-			{ time: 180, text: "till we're grey and old"},
-			{ time: 182, text: "just say you won't let go"},
-			{ time: 187, text: "just say you won't let go"},
-			{ time: 192, text: "just say you won't let go"},
-			{ time: 196, text: "oh,just say you won't let go"},
-		];
-		
-		audio.addEventListener("timeupdate", () => {
-			const currentTime = Math.floor(audio.currentTime);
-			const currentLyric = lyrics.find(lyric => lyric.time === currentTime);
-			if (currentLyric) {
-				lyricsDiv.innerHTML = currentLyric.text;
-				lyricsDiv.style.display = "block";
-			}
-		});
-	</script>
+  <div class="app-card">
+    <h1>Say You Won't Let Go</h1>
+
+    <div class="player-grid">
+      <div>
+        <div class="art-wrap" id="artWrap">
+          <img src="fekk smell.jpg" alt="Album Art">
+        </div>
+        <audio id="my-audio" controls>
+          <source src="James Arthur.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
+      <div>
+        <div id="lyrics-box" class="lyrics-box">
+          <ul id="lyrics-list" class="lyrics-list"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const audio = document.getElementById('my-audio');
+    const lyricsBox = document.getElementById('lyrics-box');
+    const lyricsList = document.getElementById('lyrics-list');
+    const artWrap = document.getElementById('artWrap');
+
+    const lyrics = [
+      { time: 11, text: "I met you in the dark" },
+      { time: 13, text: "you lit me up" },
+      { time: 16, text: "you made me feel as though" },
+      { time: 18, text: "I was enough" },
+      { time: 21, text: "we danced the night away" },
+      { time: 23, text: "we drank too much" },
+      { time: 26, text: "I held your hair back when"},
+      { time: 28, text: "you were throwing up"},
+      { time: 31, text: "then you smiled over your shoulder"},
+      { time: 33, text: "for a minute, I was stone cold sober"},
+      { time: 36, text: "I pulled you closer to my chest"},
+      { time: 41, text: "and you asked me to stay over"},
+      { time: 44, text: "I said, I already told ya"},
+      { time: 46, text: "I think that you should get some rest"},
+      { time: 51, text: "I knew I loved you then"},
+      { time: 53, text: "but you'd never know"},
+      { time: 56, text: "cause I played it cool"},
+      { time: 58, text: "when I was scared of letting go"},
+      { time: 61, text: "I knew I needed you"},
+      { time: 64, text: "but I never showed"},
+      { time: 66, text: "but I wanna stay with you"},
+      { time: 68, text: "until we're grey and old"},
+      { time: 71, text: "just say you won't let go"},
+      { time: 76, text: "just say you won't let go"},
+      { time: 81, text: "I'll wake you up with some"},
+      { time: 84, text: "breakfast in bed"},
+      { time: 86, text: "I'll bring you coffee with"},
+      { time: 89, text: "a kiss on your head"},
+      { time: 91, text: "and I'll take the kids to school"},
+      { time: 94, text: "wave them goodbye"},
+      { time: 96, text: "and I'll thank my lucky stars"},
+      { time: 99, text: "for that night"},
+      { time: 102, text: "when you looked over your shoulder"},
+      { time: 104, text: "for a minute, I forget that I'm older"},
+      { time: 107, text: "I wanna dance with you right now, whoa"},
+      { time: 111, text: "and you look as beautiful as ever"},
+      { time: 114, text: "and I swear that every day you'll get better"},
+      { time: 117, text: "you make me feel this way somehow"},
+      { time: 122, text: "I'm so in love with you"},
+      { time: 124, text: "and I hope you know"},
+      { time: 127, text: "Darling your love is more"},
+      { time: 129, text: "than worth its weight in gold"},
+      { time: 132, text: "we've come so far my dear"},
+      { time: 134, text: "look we've grown"},
+      { time: 137, text: "and I wanna stay with you"},
+      { time: 139, text: "until we're grey and old"},
+      { time: 141, text: "just say you won't let go"},
+      { time: 146, text: "just say you won't let go"},
+      { time: 152, text: "I wanna live with you"},
+      { time: 155, text: "even when we're ghosts"},
+      { time: 157, text: "cause you were always there for me"},
+      { time: 159, text: "when I needed you most"},
+      { time: 162, text: "I'm gonna love you till"},
+      { time: 165, text: "my lungs give out"},
+      { time: 167, text: "I promise till death we part"},
+      { time: 170, text: "like in our vows"},
+      { time: 172, text: "so I wrote this song for you"},
+      { time: 175, text: "now everybody knows"},
+      { time: 177, text: "that it's just you and me"},
+      { time: 180, text: "till we're grey and old"},
+      { time: 182, text: "just say you won't let go"},
+      { time: 187, text: "just say you won't let go"},
+      { time: 192, text: "just say you won't let go"},
+      { time: 196, text: "oh, just say you won't let go"},
+    ];
+
+    function renderLyrics() {
+      lyricsList.innerHTML = '';
+      for (const item of lyrics) {
+        const li = document.createElement('li');
+        li.className = 'lyric-line';
+        li.dataset.time = String(item.time);
+        const fill = document.createElement('div');
+        fill.className = 'karaoke-fill';
+        const span = document.createElement('span');
+        span.className = 'text';
+        span.textContent = item.text;
+        li.appendChild(fill);
+        li.appendChild(span);
+        lyricsList.appendChild(li);
+      }
+    }
+
+    function findLyricIndex(currentSeconds) {
+      let low = 0, high = lyrics.length - 1, ans = -1;
+      while (low <= high) {
+        const mid = (low + high) >> 1;
+        if (lyrics[mid].time <= currentSeconds) {
+          ans = mid;
+          low = mid + 1;
+        } else {
+          high = mid - 1;
+        }
+      }
+      return ans;
+    }
+
+    let activeIndex = -1;
+
+    function updateActiveLyric() {
+      const current = Math.floor(audio.currentTime);
+      const idx = findLyricIndex(current);
+      if (idx === activeIndex) return;
+
+      const prev = lyricsList.children[activeIndex];
+      const next = lyricsList.children[idx];
+      if (prev) {
+        prev.classList.remove('active');
+        const prevFill = prev.querySelector('.karaoke-fill');
+        if (prevFill) prevFill.style.width = '0%';
+      }
+      if (next) {
+        next.classList.remove('active');
+        void next.offsetWidth;
+        next.classList.add('active');
+        const fill = next.querySelector('.karaoke-fill');
+        if (fill) fill.style.width = '100%';
+        next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      activeIndex = idx;
+    }
+
+    audio.addEventListener('timeupdate', updateActiveLyric);
+    audio.addEventListener('seeked', updateActiveLyric);
+    audio.addEventListener('loadedmetadata', () => {
+      renderLyrics();
+      updateActiveLyric();
+      // delegate click to list for performance
+      lyricsList.addEventListener('click', (e) => {
+        const target = e.target.closest('.lyric-line');
+        if (!target) return;
+        const t = Number(target.dataset.time || '0');
+        if (!Number.isNaN(t)) {
+          audio.currentTime = t + 0.05;
+          audio.play();
+          updateActiveLyric();
+        }
+      });
+    });
+
+    audio.addEventListener('play', () => artWrap.classList.add('playing'));
+    audio.addEventListener('pause', () => artWrap.classList.remove('playing'));
+
+    // Dynamic brand colors from cover art using Canvas
+    (function extractColors() {
+      const img = document.querySelector('#artWrap img');
+      if (!img) return;
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      img.crossOrigin = 'anonymous';
+      if (img.complete) run();
+      else img.onload = run;
+
+      function run() {
+        const w = canvas.width = 120;
+        const h = canvas.height = 120;
+        try {
+          ctx.drawImage(img, 0, 0, w, h);
+          const data = ctx.getImageData(0, 0, w, h).data;
+          const buckets = new Map();
+          for (let i = 0; i < data.length; i += 4 * 5) { // sample every 5 px
+            const r = data[i], g = data[i+1], b = data[i+2];
+            const key = `${Math.round(r/32)*32},${Math.round(g/32)*32},${Math.round(b/32)*32}`;
+            buckets.set(key, (buckets.get(key) || 0) + 1);
+          }
+          const sorted = [...buckets.entries()].sort((a,b) => b[1]-a[1]).slice(0, 3).map(([k]) => k.split(',').map(Number));
+          if (sorted.length) {
+            const [r1,g1,b1] = sorted[0];
+            const [r2,g2,b2] = sorted[1] || sorted[0];
+            document.documentElement.style.setProperty('--brand', `rgb(${r1}, ${g1}, ${b1})`);
+            document.documentElement.style.setProperty('--brand-2', `rgb(${r2}, ${g2}, ${b2})`);
+          }
+        } catch (e) { /* ignore cross-origin */ }
+      }
+    })();
+  </script>
 </body>
 </html>
