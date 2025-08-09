@@ -156,7 +156,6 @@
     .icon:hover { transform: translateY(-1px); background: rgba(255,255,255,0.14); }
     .icon:active { transform: translateY(0); }
     .icon.primary { background: linear-gradient(90deg, var(--brand), var(--brand-2)); box-shadow: 0 8px 22px rgba(0,0,0,0.35); border: none; }
-
     .art-wrap img {
       display: block;
       width: 100%;
@@ -440,7 +439,6 @@
       const dur = Math.max(audio.duration || 0, 1);
       const pct = (audio.currentTime / dur) * 100;
       progressFill.style.width = pct + '%';
-      // buffer
       const buffered = audio.buffered && audio.buffered.length ? audio.buffered.end(audio.buffered.length - 1) : 0;
       progressBuffer.style.width = Math.min(100, (buffered / dur) * 100) + '%';
     }
