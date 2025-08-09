@@ -105,29 +105,30 @@
     /* Lyrics */
     .lyrics-box {
       position: relative;
-      height: clamp(280px, 42vh, 460px);
-      padding: 10px 4px;
-      border-radius: 14px;
+      height: clamp(320px, 50vh, 520px);
+      padding: 8px 6px;
+      border-radius: 16px;
       background: var(--card-bg);
       border: 1px solid var(--border);
       overflow: hidden;
       box-shadow: inset 0 -10px 30px rgba(0,0,0,0.18);
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 6%, black 94%, transparent 100%);
-              mask-image: linear-gradient(to bottom, transparent 0, black 6%, black 94%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 8%, black 92%, transparent 100%);
+              mask-image: linear-gradient(to bottom, transparent 0, black 8%, black 92%, transparent 100%);
     }
 
     .lyrics-list {
       list-style: none;
       margin: 0;
-      padding: 8px 10px 14px;
+      padding: 16px 12px 24px;
       height: 100%;
       overflow: auto;
       scroll-behavior: smooth;
+      text-align: center;
     }
 
     .lyric-line {
-      padding: 10px 14px;
-      margin: 6px 6px;
+      padding: 12px 16px;
+      margin: 8px 8px;
       border-radius: 12px;
       color: var(--muted);
       opacity: 0.55;
@@ -136,6 +137,8 @@
       transition: opacity .35s ease, color .35s ease, transform .35s ease, background .6s ease;
       cursor: pointer;
       user-select: none;
+      font-size: clamp(16px, 2.2vw, 22px);
+      line-height: 1.5;
     }
 
     .lyric-line:hover { opacity: 0.8; }
@@ -143,13 +146,41 @@
     .lyric-line.active {
       color: #fff;
       opacity: 1;
-      transform: scale(1.03);
+      transform: scale(1.035);
       text-shadow: 0 2px 18px rgba(255,255,255,0.12), 0 6px 26px rgba(138,43,226,0.35);
-      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 100%);
-      background-size: 220% 100%;
-      animation: shimmer 1600ms ease forwards, glowPulse 2200ms ease;
       border: 1px solid rgba(255,255,255,0.14);
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(120% 220% at 50% 50%, rgba(255,255,255,0.10), rgba(255,255,255,0) 60%);
     }
+
+    .lyric-line.active .karaoke-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand) 0%, var(--brand-2) 100%);
+      mix-blend-mode: screen;
+      opacity: 0.65;
+      pointer-events: none;
+      transition: width 0.35s linear;
+    }
+
+    .lyric-line span.text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .lyrics-list .lyric-line:nth-child(1n+1) { filter: blur(0px); }
+    .lyrics-list .lyric-line:not(.active) {
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .lyrics-list .lyric-line.active + .lyric-line { opacity: 0.9; }
+    .lyrics-list .lyric-line.active + .lyric-line + .lyric-line { opacity: 0.75; }
+    .lyrics-list .lyric-line.active ~ .lyric-line { opacity: 0.6; }
 
     @keyframes shimmer {
       0% { background-position: -120% 0; }
@@ -218,7 +249,7 @@
       { time: 76, text: "just say you won't let go"},
       { time: 81, text: "I'll wake you up with some"},
       { time: 84, text: "breakfast in bed"},
-      { time: 86, text: "I'll bring you coffe with"},
+      { time: 86, text: "I'll bring you coffee with"},
       { time: 89, text: "a kiss on your head"},
       { time: 91, text: "and I'll take the kids to school"},
       { time: 94, text: "wave them goodbye"},
@@ -230,20 +261,20 @@
       { time: 111, text: "and you look as beautiful as ever"},
       { time: 114, text: "and I swear that every day you'll get better"},
       { time: 117, text: "you make me feel this way somehow"},
-      { time: 122, text: "Im so in love with you"},
+      { time: 122, text: "I'm so in love with you"},
       { time: 124, text: "and I hope you know"},
-      { time: 127, text: "Daleng your love is more"},
-      { time: 129, text: "than worth is weight in gold"},
+      { time: 127, text: "Darling your love is more"},
+      { time: 129, text: "than worth its weight in gold"},
       { time: 132, text: "we've come so far my dear"},
       { time: 134, text: "look we've grown"},
-      { time: 137, text: "and i wanna stay with you"},
+      { time: 137, text: "and I wanna stay with you"},
       { time: 139, text: "until we're grey and old"},
       { time: 141, text: "just say you won't let go"},
       { time: 146, text: "just say you won't let go"},
       { time: 152, text: "I wanna live with you"},
-      { time: 155, text: "even when we're gosts"},
+      { time: 155, text: "even when we're ghosts"},
       { time: 157, text: "cause you were always there for me"},
-      { time: 159, text: "when I neede you most"},
+      { time: 159, text: "when I needed you most"},
       { time: 162, text: "I'm gonna love you till"},
       { time: 165, text: "my lungs give out"},
       { time: 167, text: "I promise till death we part"},
@@ -255,7 +286,7 @@
       { time: 182, text: "just say you won't let go"},
       { time: 187, text: "just say you won't let go"},
       { time: 192, text: "just say you won't let go"},
-      { time: 196, text: "oh,just say you won't let go"},
+      { time: 196, text: "oh, just say you won't let go"},
     ];
 
     function renderLyrics() {
@@ -264,7 +295,13 @@
         const li = document.createElement('li');
         li.className = 'lyric-line';
         li.dataset.time = String(item.time);
-        li.textContent = item.text;
+        const fill = document.createElement('div');
+        fill.className = 'karaoke-fill';
+        const span = document.createElement('span');
+        span.className = 'text';
+        span.textContent = item.text;
+        li.appendChild(fill);
+        li.appendChild(span);
         lyricsList.appendChild(li);
       }
     }
@@ -292,12 +329,17 @@
 
       const prev = lyricsList.children[activeIndex];
       const next = lyricsList.children[idx];
-      if (prev) prev.classList.remove('active');
+      if (prev) {
+        prev.classList.remove('active');
+        const prevFill = prev.querySelector('.karaoke-fill');
+        if (prevFill) prevFill.style.width = '0%';
+      }
       if (next) {
-        next.classList.remove('active'); // reset if reusing after seek
-        // force reflow to restart CSS animation cleanly
+        next.classList.remove('active');
         void next.offsetWidth;
         next.classList.add('active');
+        const fill = next.querySelector('.karaoke-fill');
+        if (fill) fill.style.width = '100%';
         next.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
       activeIndex = idx;
@@ -314,7 +356,7 @@
         if (!target) return;
         const t = Number(target.dataset.time || '0');
         if (!Number.isNaN(t)) {
-          audio.currentTime = t + 0.05; // nudge into the second to trigger update
+          audio.currentTime = t + 0.05;
           audio.play();
           updateActiveLyric();
         }
@@ -323,6 +365,39 @@
 
     audio.addEventListener('play', () => artWrap.classList.add('playing'));
     audio.addEventListener('pause', () => artWrap.classList.remove('playing'));
+
+    // Dynamic brand colors from cover art using Canvas
+    (function extractColors() {
+      const img = document.querySelector('#artWrap img');
+      if (!img) return;
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      img.crossOrigin = 'anonymous';
+      if (img.complete) run();
+      else img.onload = run;
+
+      function run() {
+        const w = canvas.width = 120;
+        const h = canvas.height = 120;
+        try {
+          ctx.drawImage(img, 0, 0, w, h);
+          const data = ctx.getImageData(0, 0, w, h).data;
+          const buckets = new Map();
+          for (let i = 0; i < data.length; i += 4 * 5) { // sample every 5 px
+            const r = data[i], g = data[i+1], b = data[i+2];
+            const key = `${Math.round(r/32)*32},${Math.round(g/32)*32},${Math.round(b/32)*32}`;
+            buckets.set(key, (buckets.get(key) || 0) + 1);
+          }
+          const sorted = [...buckets.entries()].sort((a,b) => b[1]-a[1]).slice(0, 3).map(([k]) => k.split(',').map(Number));
+          if (sorted.length) {
+            const [r1,g1,b1] = sorted[0];
+            const [r2,g2,b2] = sorted[1] || sorted[0];
+            document.documentElement.style.setProperty('--brand', `rgb(${r1}, ${g1}, ${b1})`);
+            document.documentElement.style.setProperty('--brand-2', `rgb(${r2}, ${g2}, ${b2})`);
+          }
+        } catch (e) { /* ignore cross-origin */ }
+      }
+    })();
   </script>
 </body>
 </html>
